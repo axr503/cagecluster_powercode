@@ -1,0 +1,58 @@
+#R Code for Cluster effects cage manuscript
+#Understanding Artificial Mouse-Microbiome Heterogeneity and Six Actionable Themes to #Increase Study Power and Reproducibility. 2019. doi: https://doi.org/10.1101/778043
+
+
+#Install (if needed) and call the following packages:
+library(dplyr)
+library(lme4)
+library(gee)
+library(sjstats)
+
+#Read in dataset
+dat<-read.csv('cluster effects cage_dataset.csv',header=T)
+head(dat)
+
+
+#Method 1a: simple linear regression with one predictive variable: treatment
+model.1<-lm(response~factor(treatment),data=dat)
+summary(model.1)
+
+#Method 2: cage-level regression (mean); no weighting
+#Subset dataset to include the treatment and mean response for each cage
+
+dat_sc1<-dat %>% select(treatcode,meancage_sc1) %>% unique() #run for each meancage_sc
+dat_sc2<-dat %>% select(treatcode,meancage_sc2) %>% unique()
+dat_sc3<-dat %>% select(treatcode,meancage_sc3) %>% unique()
+dat_sc4<-dat %>% select(treatcode,meancage_sc4) %>% unique()
+dat_sc5<-dat %>% select(treatcode,meancage_sc5) %>% unique()
+
+model.2<-lm(meancage_sc1~treatcode,data=dat_sc1) #repeat for each dat_scX
+summary(model.2)
+
+#Method 3: cage-level regression with analytic weights
+#This model can be implemented for datasets in which the number of observations per group differs
+
+weights<-c(4,4,4,5) #vector including the weights for each group
+model.3<-lm(meancage_sc1~treatcode,data=dat_sc1,weights=weights)
+summary(model.3)
+
+#Method 4: Marginal regression
+
+model.4<-gee(response~factor(treatment),id=clustscen1,data=dat,corstr="exchangeable")
+summary(model.4)
+
+#Method 5: Mixed effect model
+
+model.5<-lmer(response~factor(treatment)+(1|clustscen4),data=dat) #repeat for each clustscenX
+summary(model.5)
+
+#Calculate Intraclass Correlation Coefficient (ICC) from mixed effect model
+performance::icc(model.5)
+
+#Post hoc power calculations after study is completed
+#Design effect for two-level mixed effect model with 5 observations per cluster group and assumed ICC of 0.2
+design_effect(n=5,icc=0.2)
+
+#Calculate effective sample size based on a medium effect size of 0.3 and 4 clusters
+samplesize_mixed(eff.size=0.3, k=4)
+
