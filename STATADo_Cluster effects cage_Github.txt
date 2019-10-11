@@ -1,9 +1,12 @@
 f *************************************************************************************
 *   
 *   This file is intended as accompanying material for the manuscript entitled:
-*   "Understanding artificial mouse-microbiome heterogeneity and six actionable themes to   
-*   increase study power". Basson et al., 2019 under review.
-*   Code Written by Alex Rodriguez-Palacios 
+*
+*   Understanding artificial mouse-microbiome heterogeneity and six actionable themes to increase study power.
+*   Abigail R Basson, Alexandria LaSalla, Gretchen Lam, Danielle Kulpins, Erika L Moen, Mark Sundrud, Jun Miyoshi, 
+*   Sanja Ilic, Betty R Theriault, Fabio Cominelli, Alexander Rodriguez-Palacios
+*   bioRxiv 778043; doi: https://doi.org/10.1101/778043
+*   Code Written for illustrative and guideline purposes.  
 *   September 24, 2019
 *
 *************************************************************************************
